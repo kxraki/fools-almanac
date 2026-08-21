@@ -228,12 +228,17 @@ function grammarView(){
 
 /* ---------- SPREAD LOGGING ---------- */
 var SPREADS=[
+ {name:"Two cards \u2014 Choosing between two things",pos:["If I choose this","If I choose that"]},
  {name:"Situation, Obstacle, Advice",pos:["Situation","Obstacle","Advice"]},
  {name:"Mind, Heart, Body",pos:["Mind","Heart","Body"]},
  {name:"Holding on, Costing, Instead",pos:["What I'm holding onto","What it's costing","What to do instead"]},
- {name:"Past, Present, Future",pos:["Past","Present","Future"]}
+ {name:"Past, Present, Future",pos:["Past","Present","Future"]},
+ {name:"Five cards \u2014 The cross",pos:["Situation","What's helping","What's in the way","What you're not seeing","Where it's heading"]},
+ {name:"Six cards \u2014 A relationship",pos:["You","Them","The connection","What's working","What's not","Where it's heading"]},
+ {name:"Seven cards \u2014 The horseshoe",pos:["Past","Present","Hidden influence","Obstacle","Outside influence","Advice","Likely outcome"]}
 ];
-var sp={preset:0,cards:[null,null,null]};
+const WORDN={2:"two",3:"three",5:"five",6:"six",7:"seven"};
+var sp={preset:0,cards:Array(SPREADS[0].pos.length).fill(null)};
 
 /* The six questions from the reading rules, answered automatically.
    Seeing them computed is how they become habit. */
@@ -241,7 +246,7 @@ function observe(ids){
   const cs=ids.map(byId),out=[],suits={},nums={};
   cs.forEach(c=>{if(c.suit)suits[c.suit]=(suits[c.suit]||0)+1; if(c.arc==="pip")nums[c.n]=(nums[c.n]||0)+1;});
   const maj=cs.filter(c=>c.arc==="major").length,courts=cs.filter(c=>c.arc==="court").length;
-  if(maj>=2)out.push(["Majors",maj+" of the 3 are Major Arcana. This is bigger than your day-to-day choices."]);
+  if(maj>=2)out.push(["Majors",maj+" of the "+ids.length+" are Major Arcana. This is bigger than your day-to-day choices."]);
   Object.keys(suits).forEach(s=>{if(suits[s]>=2)out.push(["Suit weight",
     suits[s]+" "+cap(s)+" \u2014 "+SUITS[s].dom.toLowerCase()+". That's the register the whole reading is in."]);});
   Object.keys(nums).forEach(n=>{if(nums[n]>=2)out.push(["Repeated number",
@@ -253,22 +258,27 @@ function observe(ids){
 }
 function setSlot(i,id){sp.cards[i]=id||null;render();}
 function saveSpread(){
-  if(sp.cards.some(c=>!c))return toast("Choose all three cards first.");
-  const p=SPREADS[sp.preset],t=(document.getElementById("st")||{}).value||"";
+  const p=SPREADS[sp.preset];
+  if(sp.cards.length!==p.pos.length||sp.cards.some(c=>!c))return toast("Choose all "+p.pos.length+" cards first.");
+  const t=(document.getElementById("st")||{}).value||"";
   S.entries.unshift({kind:"spread",date:today(),spreadName:p.name,text:t.trim(),
     cards:sp.cards.map((id,i)=>({id:id,label:p.pos[i],name:byId(id).name}))});
   sp.cards.forEach(id=>{S.met[id]=true});
-  sp={preset:sp.preset,cards:[null,null,null]};
+  sp={preset:sp.preset,cards:Array(p.pos.length).fill(null)};
   save(); view="journal"; jfilter=null; render();
+}
+function spreadPlaceholder(p){
+  if(p.pos.length===3)return p.pos[0]+" is\u2026 which makes "+p.pos[1].toLowerCase()+"\u2026 so "+p.pos[2].toLowerCase()+" is\u2026";
+  return p.pos.map(l=>l.toLowerCase()).join(" \u2192 ")+" \u2014 read them as one thing, not "+p.pos.length+" separate meanings\u2026";
 }
 function spreadLogger(){
   const p=SPREADS[sp.preset],opts=DECK.map(c=>`<option value="${c.id}">${c.name}</option>`).join("");
-  const ready=sp.cards.every(Boolean);
-  let h=`<div class="panel"><div class="bar caps">Log a three-card spread</div>
-   <p class="small">Lay three cards from your own deck, then record them here. You write <i>one</i> reading for the whole spread, not three separate meanings \u2014 that's the difference between reciting cards and reading them.</p>
+  const ready=sp.cards.length===p.pos.length&&sp.cards.every(Boolean),n=WORDN[p.pos.length]||p.pos.length;
+  let h=`<div class="panel"><div class="bar caps">Log a ${n}-card spread</div>
+   <p class="small">Lay ${n} cards from your own deck, then record them here. You write <i>one</i> reading for the whole spread, not ${p.pos.length} separate meanings \u2014 that's the difference between reciting cards and reading them.</p>
    <div style="margin-top:13px"><label class="caps">Positions</label>
-   <select onchange="sp.preset=+this.value;render()">${SPREADS.map((s,i)=>`<option value="${i}" ${i===sp.preset?"selected":""}>${s.name}</option>`).join("")}</select></div>`;
-  if(sp.preset===3)h+=`<p class="small soft" style="margin-top:8px">Worth knowing: past/present/future is the most popular layout and the least useful one, because it asks the cards to predict rather than describe. Try the first option if this feels flat.</p>`;
+   <select onchange="sp.preset=+this.value;sp.cards=Array(SPREADS[sp.preset].pos.length).fill(null);render()">${SPREADS.map((s,i)=>`<option value="${i}" ${i===sp.preset?"selected":""}>${s.name}</option>`).join("")}</select></div>`;
+  if(p.name==="Past, Present, Future")h+=`<p class="small soft" style="margin-top:8px">Worth knowing: past/present/future is the most popular layout and the least useful one, because it asks the cards to predict rather than describe. Try the first option if this feels flat.</p>`;
   h+=`<div class="spread" style="margin-top:14px">`;
   p.pos.forEach((label,i)=>{
     h+=`<div class="slot"><div class="caps">${label}</div>
@@ -280,10 +290,10 @@ function spreadLogger(){
     h+=`<div class="derive"><div class="caps soft">Before you interpret \u2014 what the spread as a whole is doing</div><div class="sym" style="margin-top:10px">`;
     observe(sp.cards).forEach(o=>h+=`<b>${o[0]}</b><span>${o[1]}</span>`);
     h+=`</div></div>
-    <div class="step"><label class="caps">Read all three as one thing</label>
-    <textarea id="st" placeholder="${p.pos[0]} is\u2026 which makes ${p.pos[1].toLowerCase()}\u2026 so ${p.pos[2].toLowerCase()} is\u2026"></textarea>
+    <div class="step"><label class="caps">Read all ${n} as one thing</label>
+    <textarea id="st" placeholder="${spreadPlaceholder(p)}"></textarea>
     <div class="row" style="margin-top:9px"><button class="act" onclick="saveSpread()">Save spread</button>
-    <button class="act ghost" onclick="sp.cards=[null,null,null];render()">Clear</button></div></div>`;
+    <button class="act ghost" onclick="sp.cards=Array(${p.pos.length}).fill(null);render()">Clear</button></div></div>`;
   }
   return h+`</div>`;
 }
