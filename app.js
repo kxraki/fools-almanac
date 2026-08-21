@@ -235,9 +235,49 @@ var SPREADS=[
  {name:"Past, Present, Future",pos:["Past","Present","Future"]},
  {name:"Five cards \u2014 The cross",pos:["Situation","What's helping","What's in the way","What you're not seeing","Where it's heading"]},
  {name:"Six cards \u2014 A relationship",pos:["You","Them","The connection","What's working","What's not","Where it's heading"]},
- {name:"Seven cards \u2014 The horseshoe",pos:["Past","Present","Hidden influence","Obstacle","Outside influence","Advice","Likely outcome"]}
+ {name:"Seven cards \u2014 The horseshoe",pos:["Past","Present","Hidden influence","Obstacle","Outside influence","Advice","Likely outcome"]},
+ // Understanding a situation
+ {name:"What will help you, What will hinder you, Your unrealized potential",pos:["What will help you","What will hinder you","Your unrealized potential"]},
+ {name:"The nature of your problem, The cause, The solution",pos:["The nature of your problem","The cause","The solution"]},
+ {name:"Situation, Action, Outcome",pos:["Situation","Action","Outcome"]},
+ {name:"Context of the situation, Where you need to focus, Outcome",pos:["Context of the situation","Where you need to focus","Outcome"]},
+ {name:"What I think, What I feel, What I do",pos:["What I think about the situation","What I feel","What I do"]},
+ {name:"Where you stand now, What you aspire to, How to get there",pos:["Where you stand now","What you aspire to","How to get there"]},
+ {name:"What you aspire to, What is standing in your way, How to overcome this",pos:["What you aspire to","What is standing in your way","How to overcome this"]},
+ {name:"What you can change, What you can't change, What you may not be aware of",pos:["What you can change","What you can't change","What you may not be aware of"]},
+ {name:"What worked well, What didn't work well, Key learnings",pos:["What worked well","What didn't work well","Key learnings"]},
+ // Understanding relationships
+ {name:"You, Them, The relationship",pos:["You","Them","The relationship"]},
+ {name:"What you want, What they want, Where it's heading",pos:["What you want from the relationship","What they want from the relationship","Where the relationship is heading"]},
+ {name:"What brings you together, What pulls you apart, What needs your attention",pos:["What brings you together","What pulls you apart","What needs your attention"]},
+ // Making choices and decisions
+ {name:"Strengths, Weaknesses, Advice",pos:["Strengths","Weaknesses","Advice"]},
+ {name:"Opportunities, Challenges, Outcome",pos:["Opportunities","Challenges","Outcome"]},
+ {name:"Option 1, Option 2, Option 3",pos:["Option 1","Option 2","Option 3"]},
+ {name:"Option 1, Option 2, What you need to decide",pos:["Option 1","Option 2","What do you need to make a decision"]},
+ {name:"The solution, Alternative solution, How to choose",pos:["The solution","Alternative solution","How to choose"]},
+ // Understanding yourself
+ {name:"Mind, Body, Spirit",pos:["Mind","Body","Spirit"]},
+ {name:"Conscious, Subconscious, Superconscious mind",pos:["Your conscious mind","Your subconscious mind","Your superconscious mind"]},
+ {name:"Material, Spiritual, Emotional state",pos:["Material state","Spiritual state","Emotional state"]},
+ {name:"You, Your current path, Your potential",pos:["You","Your current path","Your potential"]},
+ {name:"Stop, Start, Continue",pos:["Stop","Start","Continue"]},
+ {name:"What the universe wants, Qualities required, Action required",pos:["What the universe wants you to be","The personal qualities required","Specific action required"]},
+ // Daily rituals
+ {name:"Check-In",pos:["What do I need to know today?"]},
+ {name:"Thinking, Feeling, Experiencing",pos:["What am I thinking?","What am I feeling?","What am I experiencing?"]},
+ {name:"True desire, How to manifest, Resources available",pos:["What do I truly desire today?","How can I manifest my desires today?","What resources are available to me today?"]},
+ {name:"Grateful for, Great day, Feel by day's end",pos:["What am I truly grateful for?","What will make this a great day?","How do I want to feel by the end of the day?"]},
+ {name:"Seen, Unseen, Greater awareness",pos:["What is seen and known to me?","What is unseen and unknown to me?","How can I bring greater awareness to my day?"]},
+ {name:"Who I'm becoming, One step to honor it",pos:["Who am I becoming?","What is one step I can take today to honor this evolution?"]},
+ // Monthly and lunar
+ {name:"Worked, Didn't work, Learned, This month's theme",pos:["What worked in the past month?","What didn't work?","What did I learn?","What is the theme of this month?"]},
+ {name:"New Moon \u2014 Planting seeds",pos:["What have I released?","Where am I now?","What is emerging within me?","What do I wish to grow?","How can I bring my goals and intentions to fruition?","What additional resources are available to me as I manifest my goals?"]},
+ {name:"Full Moon \u2014 Check-in and release",pos:["What have I created and manifested since the New Moon?","Where am I now?","What is coming into my conscious awareness?","What is no longer serving me?","How can I release and let go of these energies?","What additional resources are available to me as I release and let go?"]},
+ // Processing a hard feeling
+ {name:"Release and let go",pos:["What am I feeling right now?","Why am I feeling it so strong?","How can I release this feeling?","What is the feeling transforming into?","How can I rise above?","What is my new beginning?","What have I learned?"]}
 ];
-const WORDN={2:"two",3:"three",5:"five",6:"six",7:"seven"};
+const WORDN={1:"one",2:"two",3:"three",4:"four",5:"five",6:"six",7:"seven"};
 var sp={preset:0,cards:Array(SPREADS[0].pos.length).fill(null)};
 
 /* The six questions from the reading rules, answered automatically.
@@ -259,7 +299,7 @@ function observe(ids){
 function setSlot(i,id){sp.cards[i]=id||null;render();}
 function saveSpread(){
   const p=SPREADS[sp.preset];
-  if(sp.cards.length!==p.pos.length||sp.cards.some(c=>!c))return toast("Choose all "+p.pos.length+" cards first.");
+  if(sp.cards.length!==p.pos.length||sp.cards.some(c=>!c))return toast(p.pos.length===1?"Choose a card first.":"Choose all "+p.pos.length+" cards first.");
   const t=(document.getElementById("st")||{}).value||"";
   S.entries.unshift({kind:"spread",date:today(),spreadName:p.name,text:t.trim(),
     cards:sp.cards.map((id,i)=>({id:id,label:p.pos[i],name:byId(id).name}))});
@@ -268,14 +308,15 @@ function saveSpread(){
   save(); view="journal"; jfilter=null; render();
 }
 function spreadPlaceholder(p){
+  if(p.pos.length===1)return p.pos[0]+"\u2026";
   if(p.pos.length===3)return p.pos[0]+" is\u2026 which makes "+p.pos[1].toLowerCase()+"\u2026 so "+p.pos[2].toLowerCase()+" is\u2026";
   return p.pos.map(l=>l.toLowerCase()).join(" \u2192 ")+" \u2014 read them as one thing, not "+p.pos.length+" separate meanings\u2026";
 }
 function spreadLogger(){
   const p=SPREADS[sp.preset],opts=DECK.map(c=>`<option value="${c.id}">${c.name}</option>`).join("");
-  const ready=sp.cards.length===p.pos.length&&sp.cards.every(Boolean),n=WORDN[p.pos.length]||p.pos.length;
+  const ready=sp.cards.length===p.pos.length&&sp.cards.every(Boolean),n=WORDN[p.pos.length]||p.pos.length,one=p.pos.length===1;
   let h=`<div class="panel"><div class="bar caps">Log a ${n}-card spread</div>
-   <p class="small">Lay ${n} cards from your own deck, then record them here. You write <i>one</i> reading for the whole spread, not ${p.pos.length} separate meanings \u2014 that's the difference between reciting cards and reading them.</p>
+   <p class="small">Lay ${n} card${one?"":"s"} from your own deck, then record ${one?"it":"them"} here.${one?"":` You write <i>one</i> reading for the whole spread, not ${p.pos.length} separate meanings \u2014 that's the difference between reciting cards and reading them.`}</p>
    <div style="margin-top:13px"><label class="caps">Positions</label>
    <select onchange="sp.preset=+this.value;sp.cards=Array(SPREADS[sp.preset].pos.length).fill(null);render()">${SPREADS.map((s,i)=>`<option value="${i}" ${i===sp.preset?"selected":""}>${s.name}</option>`).join("")}</select></div>`;
   if(p.name==="Past, Present, Future")h+=`<p class="small soft" style="margin-top:8px">Worth knowing: past/present/future is the most popular layout and the least useful one, because it asks the cards to predict rather than describe. Try the first option if this feels flat.</p>`;
@@ -290,7 +331,7 @@ function spreadLogger(){
     h+=`<div class="derive"><div class="caps soft">Before you interpret \u2014 what the spread as a whole is doing</div><div class="sym" style="margin-top:10px">`;
     observe(sp.cards).forEach(o=>h+=`<b>${o[0]}</b><span>${o[1]}</span>`);
     h+=`</div></div>
-    <div class="step"><label class="caps">Read all ${n} as one thing</label>
+    <div class="step"><label class="caps">${one?"Write what it means":`Read all ${n} as one thing`}</label>
     <textarea id="st" placeholder="${spreadPlaceholder(p)}"></textarea>
     <div class="row" style="margin-top:9px"><button class="act" onclick="saveSpread()">Save spread</button>
     <button class="act ghost" onclick="sp.cards=Array(${p.pos.length}).fill(null);render()">Clear</button></div></div>`;
@@ -360,6 +401,18 @@ function spreadsView(){
     <div class="slot"><div class="caps">Seven</div><b style="font-weight:400">Likely outcome</b><p>Where this goes if you take the advice — not a fixed fate.</p></div>
   </div>
   <p class="small soft" style="margin-top:8px">Read it in two passes, same as the five-card cross: the run of seven first, then go back over it as one shape.</p></div>
+
+  <div class="suithead"><h3 style="font-weight:400;font-size:19px">More spreads to try</h3><span class="caps">all selectable above, in Log a spread</span></div>
+  <div class="panel"><p class="small">Different questions laid over the same one/three/four/six/seven-card shapes above. Pick any of these from the Positions dropdown when you're ready to log a reading — no need to memorise them.</p>
+  <div class="sym" style="margin-top:12px">
+    <b>Understanding a situation</b><span>What will help / hinder / your unrealized potential · The nature of the problem / the cause / the solution · Situation / action / outcome · Context / where to focus / outcome · What I think / feel / do · Where you stand / what you aspire to / how to get there · What you aspire to / what's in the way / how to overcome it · What you can change / can't change / may not be aware of · What worked / didn't work / key learnings</span>
+    <b>Understanding relationships</b><span>You / them / the relationship · What you want / what they want / where it's heading · What brings you together / pulls you apart / needs attention</span>
+    <b>Making choices and decisions</b><span>Strengths / weaknesses / advice · Opportunities / challenges / outcome · Option 1 / option 2 / option 3 · Option 1 / option 2 / what you need to decide · The solution / the alternative / how to choose</span>
+    <b>Understanding yourself</b><span>Mind / body / spirit · Conscious / subconscious / superconscious mind · Material / spiritual / emotional state · You / your current path / your potential · Stop / start / continue · What the universe wants you to be / qualities required / action required</span>
+    <b>Daily rituals</b><span>The one-card check-in · Thinking / feeling / experiencing · True desire / how to manifest / resources available · Grateful for / what makes today great / how you want to feel · Seen / unseen / greater awareness · Who I'm becoming / one step to honor it</span>
+    <b>Monthly and lunar</b><span>What worked / didn't work / learned / this month's theme · The New Moon spread, for planting seeds · The Full Moon spread, for reviewing and releasing</span>
+    <b>Processing a hard feeling</b><span>The seven-card release and let go spread</span>
+  </div></div>
 
   <div class="suithead"><h3 style="font-weight:400;font-size:19px">How cards talk to each other</h3><span class="caps">the accuracy you asked about</span></div>
   <div class="panel"><p class="small">This is where reading gets accurate. Before interpreting a single card, look at the whole spread and ask:</p>
