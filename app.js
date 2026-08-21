@@ -299,6 +299,14 @@ function spreadsView(){
   <p class="small">A single card has no context, so the context has to come from your question. "What do I need to see today" gives a card something to answer. "Will it go well?" gives it nothing.</p>
   <p class="small soft" style="margin-top:8px">The daily draw is doing two jobs at once: teaching you the card, and teaching you that meaning depends on the question.</p></div>
 
+  <div class="suithead"><h3 style="font-weight:400;font-size:19px">Two cards</h3><span class="caps">for choosing between two things</span></div>
+  <div class="panel"><p class="small">Not "which is right" — the cards don't know your life better than you do. Use it to see what each choice actually costs, so the deciding stays yours.</p>
+  <div class="spread">
+    <div class="slot"><div class="caps">One</div><b style="font-weight:400">If I choose this</b><p>What this path actually gives, and what it quietly costs.</p></div>
+    <div class="slot"><div class="caps">Two</div><b style="font-weight:400">If I choose that</b><p>Same question, the other direction.</p></div>
+  </div>
+  <p class="small soft" style="margin-top:8px">Resist reading one card as "yes" and the other as "no." Two cards describing two costs is more useful than a verdict.</p></div>
+
   <div class="suithead"><h3 style="font-weight:400;font-size:19px">Three cards</h3><span class="caps">when one card feels thin</span></div>
   <div class="panel"><p class="small">Everyone starts with past / present / future. It's the weakest of the three below, because it asks the cards to predict instead of describe. Try this one instead:</p>
   <div class="spread">
@@ -313,6 +321,35 @@ function spreadsView(){
   <div class="slot"><div class="caps">Left</div><p>What's helping</p></div><div class="slot"><div class="caps">Right</div><p>What's in the way</p></div></div>
   <div class="spread cross"><div class="slot"><div class="caps">Above</div><p>What you're not seeing</p></div><div class="slot"><div class="caps">Below</div><p>Where it's heading if nothing changes</p></div></div>
   <p class="small">Read the centre last, not first. Lay it down, read the four around it, then come back — the middle card usually changes meaning once the others have spoken.</p></div>
+
+  <div class="suithead"><h3 style="font-weight:400;font-size:19px">Six cards</h3><span class="caps">for a specific relationship</span></div>
+  <div class="panel"><p class="small">Works for a partner, a friend, a colleague — anyone the situation involves two of you in.</p>
+  <div class="spread">
+    <div class="slot"><div class="caps">One</div><b style="font-weight:400">You</b><p>What you're bringing in.</p></div>
+    <div class="slot"><div class="caps">Two</div><b style="font-weight:400">Them</b><p>What they're bringing in, as far as you can honestly read it.</p></div>
+    <div class="slot"><div class="caps">Three</div><b style="font-weight:400">The connection</b><p>What's actually happening between you, underneath both stories.</p></div>
+  </div>
+  <div class="spread">
+    <div class="slot"><div class="caps">Four</div><b style="font-weight:400">What's working</b><p>Keep doing this.</p></div>
+    <div class="slot"><div class="caps">Five</div><b style="font-weight:400">What's not</b><p>The friction, named plainly.</p></div>
+    <div class="slot"><div class="caps">Six</div><b style="font-weight:400">Where it's heading</b><p>If nothing about the pattern changes.</p></div>
+  </div>
+  <p class="small soft" style="margin-top:8px">Card two is a guess, not a fact — you're reading your perception of them, not reading their mind. Say so if you write this one down.</p></div>
+
+  <div class="suithead"><h3 style="font-weight:400;font-size:19px">Seven cards</h3><span class="caps">when five isn't enough</span></div>
+  <div class="panel"><p class="small">The classic "horseshoe." More positions than you need most weeks — save it for something with real history behind it.</p>
+  <div class="spread">
+    <div class="slot"><div class="caps">One</div><b style="font-weight:400">Past</b><p>What led here.</p></div>
+    <div class="slot"><div class="caps">Two</div><b style="font-weight:400">Present</b><p>Where it actually stands.</p></div>
+    <div class="slot"><div class="caps">Three</div><b style="font-weight:400">Hidden influence</b><p>What's affecting this that you haven't named.</p></div>
+    <div class="slot"><div class="caps">Four</div><b style="font-weight:400">Obstacle</b><p>What's in the way.</p></div>
+  </div>
+  <div class="spread">
+    <div class="slot"><div class="caps">Five</div><b style="font-weight:400">Outside influence</b><p>Who or what else is shaping this, beyond you.</p></div>
+    <div class="slot"><div class="caps">Six</div><b style="font-weight:400">Advice</b><p>What to do.</p></div>
+    <div class="slot"><div class="caps">Seven</div><b style="font-weight:400">Likely outcome</b><p>Where this goes if you take the advice — not a fixed fate.</p></div>
+  </div>
+  <p class="small soft" style="margin-top:8px">Read it in two passes, same as the five-card cross: the run of seven first, then go back over it as one shape.</p></div>
 
   <div class="suithead"><h3 style="font-weight:400;font-size:19px">How cards talk to each other</h3><span class="caps">the accuracy you asked about</span></div>
   <div class="panel"><p class="small">This is where reading gets accurate. Before interpreting a single card, look at the whole spread and ask:</p>
