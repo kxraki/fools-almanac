@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>The Fool's Almanac</title>
+<meta name="description" content="Learn the Rider–Waite–Smith tarot deck by looking at it. A daily draw, a journal, and the grammar behind all 78 cards.">
+<meta name="theme-color" content="#D5DAD6">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/favicon.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Almanac">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="app"><div class="panel">Loading…</div></div>
+
+<div id="install" role="dialog" aria-label="Install the Almanac">
+  <span class="small">Add the Almanac to your home screen for offline use.</span>
+  <span class="row"><button class="act" id="installgo">Install</button>
+  <button class="act ghost" id="installno">Not now</button></span>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+/* service worker */
+if("serviceWorker" in navigator){
+  addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+}
+/* install prompt — Chrome, Edge, Android. iOS uses Share > Add to Home Screen. */
+let deferred=null;
+const banner=document.getElementById("install");
+addEventListener("beforeinstallprompt",e=>{
+  e.preventDefault(); deferred=e;
+  if(localStorage.getItem("foolsalmanac:noinstall"))return;
+  banner.style.display="flex";
+});
+document.getElementById("installgo").onclick=async()=>{
+  banner.style.display="none";
+  if(deferred){deferred.prompt(); await deferred.userChoice; deferred=null;}
+};
+document.getElementById("installno").onclick=()=>{
+  banner.style.display="none";
+  localStorage.setItem("foolsalmanac:noinstall","1");
+};
+addEventListener("appinstalled",()=>{banner.style.display="none";});
+</script>
+</body>
+</html>

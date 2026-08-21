@@ -1,0 +1,120 @@
+
+/* ---------- THE GRAMMAR: the part that replaces memorising ---------- */
+const SUITS={
+ wands:{el:"Fire",dom:"Will, drive, the spark",q:"What do I want, and am I moving?",pace:"Fastest. Wands cards move before you're ready.",sig:"wand"},
+ cups:{el:"Water",dom:"Feeling, connection, imagination",q:"What do I actually feel about this?",pace:"Slow and tidal. Cups cards ask you to sit still.",sig:"cup"},
+ swords:{el:"Air",dom:"Thought, speech, truth, conflict",q:"What am I telling myself, and is it true?",pace:"Sharp and immediate. Swords cut in one motion.",sig:"sword"},
+ pentacles:{el:"Earth",dom:"Body, work, money, slow material things",q:"What is this doing in the real world?",pace:"Slowest. Pentacles measure in seasons.",sig:"pent"}
+};
+const NUMS={
+ 1:["Ace","The seed","The pure element, offered to you and not yet spent. Nothing has happened yet — this is the invitation."],
+ 2:["Two","The pair","Two things meeting: a choice, a partnership, a tension held in balance."],
+ 3:["Three","First result","The pair has produced something. Growth, collaboration, the first visible outcome."],
+ 4:["Four","Structure","It's stable now. Four is a foundation, and also a place you can get stuck."],
+ 5:["Five","The crack","Loss, conflict, the structure breaking. Every five hurts, in the manner of its suit."],
+ 6:["Six","Recovery","After the break: exchange, harmony, moving on, help given or received."],
+ 7:["Seven","The test","Standing alone with it. Perseverance, illusion, or strategy — depending on the suit."],
+ 8:["Eight","Momentum","Movement and repetition. Things are underway and picking up speed."],
+ 9:["Nine","The extreme","The suit taken almost as far as it goes — its best or its worst, felt intensely."],
+ 10:["Ten","Completion","The end of the cycle. Full to overflowing, for better or worse."]
+};
+const RANKS={
+ page:["Page","The student","New to this element. Curious, unpolished, often carrying news."],
+ knight:["Knight","The extreme","The element at full speed, out of balance. Action first."],
+ queen:["Queen","Inward mastery","Embodies the element. Understands it from the inside."],
+ king:["King","Outward mastery","Directs the element in the world. Authority, responsibility."]
+};
+
+/* ---------- MAJOR ARCANA ---------- */
+const R=["0","I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII","XIII","XIV","XV","XVI","XVII","XVIII","XIX","XX","XXI"];
+const MAJORS=[
+["The Fool","A young figure steps toward a cliff edge, face turned to the sky, a white rose in one hand and a small dog at their heel.",[["The cliff edge","The step is being taken before the ground is checked"],["The dog","Instinct — either warning you or coming along"],["The white rose","Innocence, not naivety: nothing has been spent yet"]],"Beginning before you feel ready. The leap taken in trust.","Recklessness — or the opposite: refusing to start at all.","Where is the figure looking? Not at the ground."],
+["The Magician","A figure at a table holding a wand upward, one hand pointing down. A cup, sword, wand and pentacle lie in front of him; an infinity sign floats overhead.",[["All four suits on the table","You already have every tool you need"],["One hand up, one down","Bringing an idea down into the material world"]],"Focused will turning an intention into an actual thing.","Scattered energy, talk without follow-through, or persuasion used badly.","Count the objects on the table. All four suits are there."],
+["The High Priestess","A veiled figure seated between a black pillar and a white one, a scroll half hidden in her lap, a crescent moon at her feet.",[["The half-hidden scroll","You are not meant to see all of it yet"],["The veil of pomegranates","A threshold you can't cross by thinking harder"]],"Knowing something without evidence. Wait, and listen.","Ignoring your gut, or secrets kept past their usefulness.","How much of the scroll is actually visible?"],
+["The Empress","A woman reclines on cushions in a field of ripe wheat, a stream running through the forest behind her.",[["The wheat, already ripe","Abundance that arrived by growing, not by force"],["The flowing stream","Care that keeps moving outward"]],"Fertility, generosity, tending something until it flourishes.","Smothering — or neglecting what you're meant to be nurturing, including yourself.","Notice she is seated, not working. The growth is happening around her."],
+["The Emperor","An armoured figure on a stone throne carved with rams' heads, against barren mountains.",[["The stone throne","Structure that doesn't move"],["The barren mountains","Order imposed on hard ground"]],"Authority, boundaries, the rules that make things possible.","Rigidity and control — or authority you've failed to claim.","Compare the ground here to The Empress's field."],
+["The Hierophant","A robed figure between two pillars raises a hand in blessing over two acolytes; crossed keys lie at his feet.",[["The two acolytes","Knowledge passed down, not discovered"],["The crossed keys","Access held by an institution"]],"Tradition, teaching, doing it the established way.","Dogma — or a necessary break from convention.","He is between pillars too, like the High Priestess. Hers were unmarked; his are a building."],
+["The Lovers","Two figures stand under an angel. Behind one, a tree in flames; behind the other, a tree with a serpent.",[["The angel above","The choice is larger than preference"],["Two different trees","Two genuine goods, not good versus bad"]],"A real choice between two things you want. Union that costs something.","Misalignment, or dodging the decision and calling it patience.","Neither figure is looking at the other."],
+["The Chariot","A figure stands in a canopied chariot pulled by two sphinxes, one black and one white. There are no reins.",[["No reins","It's held together by will, not equipment"],["Sphinxes pulling opposite ways","Contradictory forces, currently aligned"]],"Forward drive maintained by sheer concentration.","Losing the thread. Force with no direction, or drifting to a stop.","Look at his hands. What is he actually steering with?"],
+["Strength","A woman calmly closes a lion's jaws with her bare hands. An infinity sign hovers above her.",[["Her hands, not a weapon","Power that doesn't need force"],["The lion, unharmed","Nothing is being defeated — it's being handled"]],"Patience as strength. Staying gentle while staying firm.","Self-doubt, forcing an outcome, or a temper close to the surface.","Is she straining? Look at her face."],
+["The Hermit","A cloaked figure stands on a peak holding a lantern with a star inside it.",[["The lantern held out","The light is for the path, and possibly for someone behind"],["The peak","Distance chosen deliberately"]],"Stepping back on purpose to find out what you think.","Isolation that has quietly become a hiding place.","He is holding the lantern out, not close to himself."],
+["Wheel of Fortune","A great wheel turns in the sky. Four winged creatures at the corners read books.",[["The wheel","A turn you did not cause and can't stop"],["The creatures reading","Something steady while everything else moves"]],"Timing shifting. Luck, cycles, the change that comes from outside.","Resisting the turn. Feeling pinned at the bottom of the wheel.","Nothing on this card is standing on the ground."],
+["Justice","An enthroned figure holds an upright sword in one hand and level scales in the other.",[["The sword held upright","Decision, not negotiation"],["Level scales","Weighing that has already been done"]],"Consequence. Exact, impersonal, and not interested in your intentions.","Imbalance, avoided accountability, judgement skewed by bias.","Unlike most figures, she looks straight out at you."],
+["The Hanged Man","A figure hangs upside down by one ankle from a living tree, face calm, a halo around his head.",[["Suspended by choice","The rope is on his ankle, not his neck"],["The living tree","The pause is generative"]],"Deliberate suspension. Seeing it from the other way up.","Stalling dressed as patience. Martyrdom. Refusing the pause you need.","His free leg is crossed casually. He is not struggling."],
+["Death","A skeleton in armour rides a white horse. A bishop, a woman and a child meet it; the sun rises between two towers behind.",[["The rising sun","Something continues after this"],["Figures of every station","It does not negotiate or make exceptions"]],"An ending that clears the ground. Almost never literal death.","Clinging to something that has already ended.","Look at the horizon, not the rider."],
+["Temperance","An angel pours liquid between two cups, one foot on land and one in the water.",[["Pouring between cups","Blending, in the right proportion, slowly"],["One foot in each element","Holding two states at once"]],"Patience, moderation, finding the mixture that works.","Excess, impatience, or combining things that shouldn't be combined.","The liquid is flowing at an angle water shouldn't manage."],
+["The Devil","A horned figure sits above two chained people. The chains around their necks are loose.",[["The loose chains","They could lift them off"],["The figures' own horns","They've come to resemble what holds them"]],"What you have agreed to be bound by. Compulsion, appetite, a bad bargain.","Seeing the chain clearly. Loosening it. The first honest look.","Compare these two figures to the two in The Lovers."],
+["The Tower","Lightning strikes a tower and knocks the crown off it. Two figures fall.",[["The crown falling","What's destroyed is the false structure at the top"],["Lightning, not siege","It comes suddenly and from outside"]],"Sudden collapse of something that was built wrong. Fast, unwelcome, clarifying.","The same collapse, slower — or disaster narrowly survived.","The tower is on a bare rock. Consider what it was founded on."],
+["The Star","A figure kneels by a pool, pouring water onto the land and into the water, under one large star and seven small ones.",[["Pouring into land and water both","Replenishing everything, not choosing"],["Bare and unguarded","Nothing left to protect"]],"Quiet hope after the wreck. Healing, clarity, replenishment.","Faith gone flat. Hopelessness, or hope you can't quite reach.","This card follows The Tower. That order is not an accident."],
+["The Moon","A dog and a wolf howl at the moon. A crayfish crawls out of a pool onto a path between two towers.",[["Dog and wolf","The tame and wild version of the same thing, indistinguishable at night"],["The crayfish emerging","Something surfacing from below that you can't yet name"]],"The unclear stretch. Fear, dreams, distorted sight, walking anyway.","Fog beginning to lift — or self-deception hardening.","The path continues past the towers, into where you can't see."],
+["The Sun","A child rides a white horse under an enormous sun. Sunflowers rise over a wall behind.",[["The child, unguarded","Nothing hidden, nothing performed"],["The wall behind","Something has been left behind"]],"Plain clarity and gladness. What is true is also visible.","Joy dimmed or delayed. Cheer being performed rather than felt."," The sunflowers are turned toward the child, not the sun."],
+["Judgement","An angel sounds a trumpet. Figures rise from coffins with their arms open.",[["Arms open, not shielding","The call is welcomed"],["Rising together","A collective reckoning, not a private one"]],"A summons you answer. Reckoning, vocation, the past resolved.","Ignoring the call. Or judging yourself far past what's useful.","They rise before they're told what the verdict is."],
+["The World","A dancer moves inside a laurel wreath, a creature at each of the four corners.",[["The closed wreath","A cycle actually complete"],["Four creatures","The same four that watched the Wheel turn"]],"Completion. The whole thing is finished, and you're inside it.","A loose end. Nearly done, not quite closed."," Compare this figure's posture to The Fool's."]
+];
+
+
+/* ---------- MINOR ARCANA: scene, read, reversed-tendency ---------- */
+const PIPS={
+wands:[
+["A hand reaches from a cloud offering a sprouting staff.","The spark, handed to you. A venture worth starting.","Spark that fizzles, or a start you keep postponing."],
+["A man on a battlement holds a globe, one staff fixed to the wall, one in his hand.","The plan is made and the world is not yet entered.","Fear of leaving the wall. Planning as avoidance."],
+["A figure on a cliff watches ships sail out.","You've committed and now you wait. Expansion underway.","Ships not coming back. Impatience with your own timeline."],
+["Four staves form a garlanded canopy; people celebrate beneath.","A milestone that holds. Homecoming, stability worth marking.","The celebration is thinner than it looks. Instability at home."],
+["Five youths clash staves. Nobody is hurt.","Messy competition. Friction, not war.","Conflict avoided or resolved — or it turns genuinely nasty."],
+["A rider wearing a laurel wreath moves through a crowd.","Recognition. The win seen by others.","Praise that doesn't land, or a win you can't admit you want."],
+["A figure on high ground fends off six staves from below.","Defending your position. You have the advantage and it's tiring.","Ground given up. Overwhelmed, or fighting nobody."],
+["Eight staves fly through open sky. No people at all.","Speed. Messages, momentum, everything happening at once.","Delay, or motion with nothing behind it."],
+["A bandaged figure leans on a staff, eight standing behind.","Worn out and still guarding. The last stretch.","Defensiveness past the point of need. Paranoia."],
+["A figure bends under ten staves, a town just ahead.","Carrying too much, nearly there.","Putting it down — or refusing to, out of pride."]],
+cups:[
+["A hand offers an overflowing cup; a dove descends toward it.","Feeling offered. The heart opening.","Feeling withheld, or an offer you can't accept."],
+["Two people exchange cups beneath a winged caduceus.","A bond made between equals.","Imbalance, a bond strained or misread."],
+["Three figures raise their cups in a dance.","Shared joy. Friendship, celebration, being among people.","Crowds that drain you, or gossip in the group."],
+["A seated figure ignores a cup offered from a cloud; three sit before him.","Discontent. The offer you can't see because you're bored.","Looking up. Or apathy hardening."],
+["A cloaked figure looks at three spilled cups; two stand upright behind.","Grief fixed on what was lost.","Turning around. Beginning to see the two still standing."],
+["A child hands a flowered cup to another in a walled garden.","Memory, innocence, the past coming to visit.","Nostalgia used as a hiding place."],
+["A figure faces seven cups of visions rising in cloud.","Too many options, and most of them are fantasy.","Choosing one. Or realising none were real."],
+["A figure walks away from eight stacked cups under a rising moon.","Leaving something that was working. It wasn't enough.","Staying out of guilt, or leaving without knowing why."],
+["A satisfied figure sits before a curved row of nine cups.","The wish met. Contentment, comfort, having enough.","Getting it and feeling nothing. Or wanting the wrong thing."],
+["A family stands under a rainbow of ten cups.","Emotional fullness that lasts. Belonging.","The picture is performed. Disconnection inside the good life."]],
+swords:[
+["A hand grips an upright sword crowned with a wreath.","Clarity that cuts. The truth, raw and useful.","Confusion, or truth used as a weapon."],
+["A blindfolded figure holds two crossed swords by the sea.","Refusing to look. A decision stalled on purpose.","The blindfold coming off. Information you can't unsee."],
+["Three swords pierce a heart under falling rain.","Plain heartbreak, said out loud.","The wound closing, slowly. Or pain nursed deliberately."],
+["A knight lies in effigy in a chapel, three swords on the wall.","Enforced rest. Recovery, not defeat.","Rest refused, or rest that's become withdrawal."],
+["A figure gathers swords while two others walk away.","A win that cost you the relationship.","Making amends — or realising the win was hollow."],
+["A ferryman poles a boat of swords toward calmer water.","Leaving with the damage still aboard. Moving on anyway.","Stuck, or carrying more than you needed to."],
+["A figure slips away with five swords, leaving two behind.","Going around instead of through. Strategy, or deceit.","Getting caught. Or choosing honesty at cost."],
+["A bound, blindfolded figure stands among eight swords; the ground is open around her.","A trap that is mostly belief. The way out is unguarded.","Stepping out. Seeing the ground for the first time."],
+["A figure sits up in bed, face in hands, nine swords on the wall.","Night-fear. Dread far larger than the actual fact.","Morning. Or the dread becoming a habit."],
+["A figure lies face down with ten swords in the back; dawn breaks behind.","The worst is over, because it is finished.","Slow endings. Or refusing to accept it's done."]],
+pentacles:[
+["A hand offers a gold coin above a walled garden.","A concrete opportunity. Seed money, a real beginning.","An opportunity missed, or a shaky foundation."],
+["A figure juggles two coins inside a looping ribbon; ships ride rough sea behind.","Balancing. Adaptable, and slightly at the mercy of the waves.","Dropping one. Overcommitted."],
+["A mason confers with two others inside a cathedral.","Skill recognised. Working with people who know what you can do.","Working alone when you shouldn't. Skill unseen."],
+["A seated figure clutches four coins tightly.","Holding on. Security that has started to stiffen.","Loosening the grip — or losing it all at once."],
+["Two beggars pass a lit stained-glass window in the snow.","Hardship, with help right there and unnoticed.","Recovery beginning. Or refusing the help again."],
+["A merchant holds level scales and gives coins to two kneeling figures.","Giving and receiving, with the power uneven.","Strings attached. Generosity that isn't."],
+["A farmer leans on a hoe, looking at a bush heavy with coins.","The pause to assess slow growth. Nothing to do yet.","Impatience. Pulling it up to check the roots."],
+["A craftsman hammers coins one at a time at a bench.","Practice. Repetition. Apprenticeship to a skill.","Going through the motions. Or perfectionism stalling you."],
+["A robed figure stands in a walled vineyard with a falcon on the wrist.","Earned independence. Self-sufficiency you built.","Dependence, or independence that's really isolation."],
+["Three generations stand under an arch with ten coins and two dogs.","Legacy. Wealth that outlasts the person who made it.","Family friction over material things. Nothing to pass on."]]};
+
+const COURTS={
+wands:{page:["A herald examines a tall staff.","Eager beginner. News of a venture.","All enthusiasm, no direction."],
+knight:["A knight on a rearing horse, visor up.","Headlong action. Charismatic, poor at finishing.","Recklessness, or a stalled engine."],
+queen:["A queen with a sunflower; a black cat sits at her feet.","Warm, confident will. Holds a room without effort.","Insecurity underneath the confidence."],
+king:["A king on a throne carved with lions and salamanders.","Vision directed outward. Leadership people follow.","Domineering, or a leader with no vision left."]},
+cups:{page:["A page looks at a fish rising from his cup.","A surprising feeling. Playful, unguarded imagination.","Feelings dismissed. Immaturity."],
+knight:["A knight rides slowly forward, offering a cup.","Following feeling. The romantic offer, made in earnest.","Offers that aren't sincere, or feeling chased for its own sake."],
+queen:["A queen studies an ornate closed cup, throne at the water's edge.","Deep feeling held with care. Real empathy.","Overwhelmed by others' feelings. Boundaries gone."],
+king:["A king sits calm on a throne afloat on turbulent sea.","Feeling mastered. Steady counsel in bad weather.","Calm that is actually suppression."]},
+swords:{page:["A watchful youth holds a sword up in a strong wind.","Curiosity, scrutiny, questions. Sometimes gossip.","Snooping. Cleverness without judgement."],
+knight:["A knight charges at full gallop, sword forward.","Argument at speed. The force of a made-up mind.","Rushing into a fight you can't win."],
+queen:["A queen holds an upright sword, one hand extended, clouds below.","Clear-eyed. Will not soften the truth to make it easier.","Coldness. Truth used to wound."],
+king:["A stern king holds his sword upright on a grey throne.","Judgement, principle, the rule applied.","Rigid, or authority abused."]},
+pentacles:{page:["A page studies a single coin closely.","The student. A steady, practical start.","Distraction. Study that never becomes practice."],
+knight:["A knight sits still on a heavy horse in a ploughed field.","Slow, reliable, unglamorous progress.","Stagnation. Reliability curdled into stubbornness."],
+queen:["A queen holds a coin in her lap; a rabbit runs by her feet.","Nurturing through practical care. Makes people safe.","Care given until there's none left for herself."],
+king:["A king in a robe of grapes on a bull-carved throne.","Established provider. Material mastery.","Wealth as identity. Controlling through resources."]}};
+

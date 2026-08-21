@@ -1,0 +1,17 @@
+{
+  "name": "The Fool's Almanac",
+  "short_name": "Almanac",
+  "description": "Learn the Rider–Waite–Smith tarot deck by looking at it.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#D5DAD6",
+  "theme_color": "#D5DAD6",
+  "categories": ["education", "lifestyle"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
