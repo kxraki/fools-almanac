@@ -123,3 +123,19 @@ Things a daily-use version would eventually want, roughly in the order I'd add t
 - A reversals toggle on the daily draw
 - Daily reminder notifications — the one feature that genuinely needs a native wrapper
   (Capacitor), since web push on iOS is unreliable
+
+---
+
+## Keeping the two builds in sync
+
+`build_artifact.py` regenerates the single-file version (the one that runs inside Claude)
+from this same source, so a feature only ever needs writing once:
+
+```bash
+python3 build_artifact.py
+```
+
+The two builds differ in exactly three places, each marked in `app.js`:
+`STORAGE` (localStorage vs Claude's storage API), `IMGSRC` (image files vs inline base64),
+and the `BUILD` flag (hides the offline downloader where there's no service worker).
+If you edit anything inside those markers, edit both sides.
